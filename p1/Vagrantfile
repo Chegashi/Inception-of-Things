@@ -1,0 +1,66 @@
+# P1 - Vagrantfile for K3s cluster (Server + Worker)
+
+Vagrant.configure("2") do |config|
+  config.vm.boot_timeout = 600
+  
+  # Enable SSH key sharing
+  config.ssh.insert_key = true
+  config.ssh.forward_agent = true
+
+  # Required static IPs
+  CONTROLLER_IP = "192.168.56.110"
+  WORKER_IP = "192.168.56.111"
+  NETWORK_PREFIX = "192.168.56"
+
+  # Define both VMs
+  machines = [
+    {
+      name: "mochegriS",     # Server
+      hostname: "mochegriS", 
+      ip: CONTROLLER_IP,     
+      memory: "1024",        
+      cpus: 1,               
+      box_name: "mochegriS", 
+      role: "controller"     
+    },
+    {
+      name: "mochegriSW",     # Worker
+      hostname: "mochegriSW", 
+      ip: WORKER_IP,          
+      memory: "1024",        
+      cpus: 1,                
+      box_name: "mochegriSW", 
+      role: "worker"          
+    }
+  ]
+
+  # Create each VM
+  machines.each do |machine|
+    config.vm.define machine[:name] do |node|
+      node.vm.box = "debian/bookworm64"
+      node.vm.hostname = machine[:hostname]
+      
+      # Set up eth1 interface with static IP
+      node.vm.network "private_network", ip: machine[:ip]
+      
+      # Share folder for configuration exchange
+      node.vm.synced_folder "./conf_files", "/shared", type: "virtualbox"
+
+      # Configure VM resources
+      node.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--name", machine[:box_name]]
+        vb.memory = machine[:memory]
+        vb.cpus = machine[:cpus]
+        vb.customize ["modifyvm", :id, "--vram", "8"]
+        vb.customize ["modifyvm", :id, "--audio", "none"]
+      end
+      
+      # Install K3s
+      if machine[:role] == "controller"
+        node.vm.provision "shell", path: "setup.sh", args: "controller"
+      else
+        node.vm.provision "shell", path: "setup.sh", args: ["worker", CONTROLLER_IP]
+      end
+    end
+  end
+end 

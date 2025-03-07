@@ -1,0 +1,24 @@
+# K3s Cluster Configuration Template
+# Copy to "cluster_config" and modify as needed
+
+# Controller IP (Server node)
+# Must be 192.168.56.110 for project requirements
+K3S_CONTROLLER_IP="192.168.56.110"
+
+# K3s API server port
+K3S_PORT="6443"
+
+# Network prefix for private network
+NETWORK_PREFIX="192.168.56"
+
+# Optional: Additional K3s arguments
+#K3S_ARGS="--disable=traefik"
+
+# Optional: Node name prefix
+#K3S_NODE_NAME_PREFIX="k3s-"
+
+# Optional: Specify K3s version
+#INSTALL_K3S_VERSION="v1.25.3+k3s1"
+
+# Uses eth1 interface for Flannel networking
+#K3S_FLANNEL_IFACE="eth1"  # Set in setup.sh 
