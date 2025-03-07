@@ -2,20 +2,46 @@
 
 A minimal K3s cluster setup using Vagrant and VirtualBox.
 
-## Quick Start
+## How to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Chegashi/Inception-of-Things/
+   cd Inception-of-Things/p1
+   ```
+
+2. Run the cluster:
+   ```bash
+   make all
+   ```
+
+3. Wait for the installation to complete (~5-10 minutes)
+
+4. Connect to the controller node:
+   ```bash
+   vagrant ssh mochegriS
+   ```
+
+5. Verify the cluster is running:
+   ```bash
+   kubectl get nodes
+   ```
+   Both nodes should show as "Ready"
+
+## Quick Commands
 
 ```bash
-# Create and start the cluster
-make all
-
 # Show VM status
 make vm
 
-# Connect to controller node
-vagrant ssh mochegriS
+# Reload VMs
+make reload
 
 # Destroy all VMs
 make clean
+
+# Rebuild from scratch
+make re
 ```
 
 ## Prerequisites
@@ -32,15 +58,5 @@ make clean
 - `conf_files/cluster_config.template`: Cluster configuration template
 - `Makefile`: Automation commands
 
-## Verification
-
-After installation, SSH to controller and run:
-
-```bash
-kubectl get nodes
-```
-
-Both nodes should be listed and in "Ready" state.
-
 ---
-This project is part of the 1337 school curriculum.
+This project is part of the 1337 school curriculum. 
