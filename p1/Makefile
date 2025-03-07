@@ -1,15 +1,3 @@
-# ==============================================
-# P1 - Inception of Things - Makefile
-# ==============================================
-# This Makefile provides convenient commands for managing
-# the Vagrant-based Kubernetes cluster for the "Inception of Things" project.
-# 
-# The commands in this Makefile address the project requirements for:
-# - Creating VMs with proper resource allocation and networking
-# - Setting up K3s in controller and agent modes
-# - Configuring password-less SSH between machines
-# - Ensuring proper networking with specific IPs
-
 # Command for creating/provisioning VMs
 CMD = vagrant up --provision
 
