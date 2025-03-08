@@ -4,11 +4,13 @@
 echo "Updating system and installing required packages..."
 sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y curl net-tools
+sudo ln -sf /sbin/ifconfig /usr/local/bin/ifconfig
 
 # Create an alias for kubectl as 'k' and update PATH
 echo "Configuring .bashrc for kubectl alias and PATH..."
 echo "alias k='kubectl'" >> /home/vagrant/.bashrc
 echo 'export PATH="/sbin:$PATH"' >> /home/vagrant/.bashrc
+
 
 # Check if role parameter is provided
 if [ -z "$1" ]; then

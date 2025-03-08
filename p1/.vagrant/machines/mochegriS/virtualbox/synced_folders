@@ -1,0 +1,1 @@
+{"virtualbox":{"/shared":{"type":"virtualbox","guestpath":"/shared","hostpath":"/home/mochegri/Inception-of-Things/p1/conf_files","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/mochegri/Inception-of-Things/p1","disabled":false,"__vagrantfile":true}}}

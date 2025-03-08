@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
   # Required static IPs
   CONTROLLER_IP = "192.168.56.110"
   WORKER_IP = "192.168.56.111"
-  NETWORK_PREFIX = "192.168.56"
 
   # Define both VMs
   machines = [
@@ -51,15 +50,13 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--name", machine[:box_name]]
         vb.memory = machine[:memory]
         vb.cpus = machine[:cpus]
-        vb.customize ["modifyvm", :id, "--vram", "8"]
-        vb.customize ["modifyvm", :id, "--audio", "none"]
       end
       
       # Install K3s
       if machine[:role] == "controller"
-        node.vm.provision "shell", path: "setup.sh", args: "controller"
+        node.vm.provision "shell", path: "./scripts/setup.sh", args: "controller"
       else
-        node.vm.provision "shell", path: "setup.sh", args: ["worker", CONTROLLER_IP]
+        node.vm.provision "shell", path:  "./scripts/setup.sh", args: ["worker", CONTROLLER_IP]
       end
     end
   end

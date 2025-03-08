@@ -1,10 +1,6 @@
 # Command for creating/provisioning VMs
 CMD = vagrant up --provision
 
-# ==============================================
-# Main targets
-# ==============================================
-
 # Create and start the K3s cluster (Server and Worker)
 all:
 	@echo "Creating K3s cluster..."
