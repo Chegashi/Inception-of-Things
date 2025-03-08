@@ -64,6 +64,10 @@ elif [ "$ROLE" = "worker" ]; then
         sleep 2
         echo "Waiting for the token from the controller..."
     done
+    while [ ! -f /shared/k3s.yaml ]; do
+        sleep 2
+        echo "Waiting for kubeconfig file from the controller..."
+    done
     
     # Read the token
     TOKEN=$(cat /shared/node-token)
@@ -71,7 +75,22 @@ elif [ "$ROLE" = "worker" ]; then
     
     # Install K3s in worker mode
     curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644" INSTALL_K3S_EXEC="--flannel-iface eth1" K3S_URL=https://$SERVER_IP K3S_TOKEN=$TOKEN sh -
+    sudo mkdir -p /home/vagrant/.kube
+    sudo chown vagrant:vagrant /home/vagrant/.kube
     
+    #not work because connection not yet established 
+    #so we will use the hard way
+    sudo cp /shared/k3s.yaml /home/vagrant/.kube/config 
+    # Ensure the file is owned by vagrant
+    sudo chown vagrant:vagrant /home/vagrant/.kube/config
+
+    sudo sed -i 's/127.0.0.1/192.168.56.110/g' /home/vagrant/.kube/config
+    #sudo sed -i 's/127.0.0.1/192.168.56.110/g' ~/.kube/config
+
+    export KUBECONFIG=/home/vagrant/.kube/config
+    echo "export KUBECONFIG=/home/vagrant/.kube/config" | sudo tee -a /home/vagrant/.bashrc
+    source /home/vagrant/.bashrc
+
     sleep 10
     echo "Worker node setup complete."
 else
